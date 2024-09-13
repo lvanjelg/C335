@@ -1,39 +1,65 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+// Defines custom stack structure
 typedef struct Stack{
     int size;
     int top;
-    long int nums[];
+    unsigned int nums[];
 } stack;
-
-long int add(long int a, long int b){
+// Basic operations for calculator functionality
+unsigned int add(unsigned int a, unsigned int b){
     return a + b;
 }
-long int sub(long int a, long int b){
+unsigned int sub(unsigned int a, unsigned int b){
     return a - b;
 }
-long int mult(long int a, long int b){
+unsigned int mult(unsigned int a, unsigned int b){
     return a * b;
 }
-long int divide(long int a, long int b){
+unsigned int divide(unsigned int a, unsigned int b){
     return a / b;
 }
-long int pop(stack* s){
-    int temp = s->nums[s->top];
+// Push and pop functions for stack
+unsigned int pop(stack* s){
+    unsigned int temp = s->nums[s->top];
     s->size = s->size - 1;
     s->top = s->top - 1;
     return temp;
 }
-void push(stack* s, long int a){
+void push(stack* s, unsigned int a){
     s->size = s->size + 1;
     s->top = s->top + 1;
     s->nums[s->top] = a;
 }
-long int convert(char c, int base){
-
-    return 0;
+// Function to convert numbers from char type to int type, and into base 10
+unsigned int convert(const char *c, int base){
+    unsigned int size = 0, num = 0;
+    const char *temp;
+    for(temp = c; *temp != '\0'; temp++){
+        size++;
+    }
+    if(base == 2){
+        for(int i = 2; i < size; i++){
+            num *= 2;
+            num += c[i] - '0';
+        }
+    }else if(base == 16){
+        for(int i = 2; i < size; i++){
+            num *= 16;
+            if(c[i] >= 'a' && c[i] <= 'f'){
+                num += c[i] - 'a' + 10;
+            }else{
+                num += c[i] - '0';
+            }
+        }
+    }else{
+        for(int i = 0; i < size; i++){
+            num *= 10;
+            num += c[i] - '0';
+        }
+    }
+    return num;
 }
 
 int main(int argc, char** argv){
@@ -41,9 +67,8 @@ int main(int argc, char** argv){
         printf("Argument error.\n");
         return -1;
     }
-    long int a = 0, b = 0;
-    int base = 0;
-    stack* s = (stack*)malloc(sizeof(stack)+ (argc-1)*sizeof(long int));
+    unsigned int a = 0, b = 0;
+    stack* s = (stack*)malloc(sizeof(stack)+ (argc-1)*sizeof(int));
     s->size = 0;
     s->top = -1;
     for(int i = 1; i < argc; i++){
@@ -76,9 +101,16 @@ int main(int argc, char** argv){
                 push(s,a);
             }
         }else{
-            push(s,strtol(argv[i],base));
+            if(argv[i][0] == '0' && argv[i][1] == 'b'){
+                push(s,convert(argv[i],2));
+            }else if(argv[i][0] == '0' && argv[i][1] == 'x'){
+                push(s,convert(argv[i],16));
+            }else{
+                push(s,convert(argv[i],10));
+            }
+            
         }        
     }
-    printf("%li\n",a);
+    printf("%u\n",a);
     return 0;
 }
