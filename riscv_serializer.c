@@ -22,7 +22,8 @@ int generate_store_instruction(int width, int address, int source, int offset) {
   load |= width << 12;
   load |= address << 15;
   load |= source << 20;
-  load |= offset << 25;
+  load |= (offset << 7) << 7;
+  load |= (offset >> 5) << 25;
   return load;
 }
 
