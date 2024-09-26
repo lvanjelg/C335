@@ -9,19 +9,37 @@
  *  Stduent functions - Full in each so that they return the integer value of the requested instruction
  */
 int generate_load_instruction(int width, int destination, int address, int offset) {
-  return NOT_IMPLEMENTED;
+  int load = 0x0 << 2;
+  load |= width << 12;
+  load |= destination << 7;
+  load |= address << 15;
+  load |= offset << 20;
+  return load;
 }
 
 int generate_store_instruction(int width, int address, int source, int offset) {
-  return NOT_IMPLEMENTED;
+  int load = 0x8 << 2;
+  load |= width << 12;
+  load |= address << 15;
+  load |= source << 20;
+  load |= offset << 25;
+  return load;
 }
 
 int generate_math_instruction(int function, int a, int b, int destination) {
-  return NOT_IMPLEMENTED;
+  int load = 0xC << 2;
+  load |= function << 12;
+  load |= a << 15;
+  load |= b << 20;
+  load |= destination << 7;
+  return load;
 }
 
 int generate_constant_instruction(int value, int destination) { 
-  return NOT_IMPLEMENTED;
+  int load = 0xD << 2;
+  load |= destination << 7;
+  load |= value << 12;
+  return load;
 }
 
 
