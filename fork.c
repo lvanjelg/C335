@@ -2,11 +2,12 @@
 #include <stdio.h>
 #include <unistd.h>
 #include <string.h>
+#include <sys/wait.h>
 
 int main(int argc, char** argv){
     int p[2];
     pipe(p);
-    pid_t pid = fork();
+    int pid = fork();
     char command[10];
     if(pid == 0){
         //CHILD
